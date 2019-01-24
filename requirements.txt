@@ -1,0 +1,10 @@
+django
+djangorestframework
+django-rest-auth
+django-allauth
+openpyxl
+reportlab
+simplejson
+django-debug-toolbar
+
+
