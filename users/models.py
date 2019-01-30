@@ -47,7 +47,7 @@ class User(AbstractUser):
                                 validators=[login])
 
     # Отображаемое имя пользователя
-    name = models.CharField(verbose_name=u'имя пользователя в системе', unique=True, max_length=30, db_index=True,
+    pseudonym = models.CharField(verbose_name=u'псевдоним пользователя в системе', unique=True, max_length=30, db_index=True,
                             validators=[alpha_all])
     # Авторизация будет происходить по E-mail
     email = models.EmailField(verbose_name=u'электронная почта', unique=True, max_length=255, validators=[email])
@@ -73,12 +73,12 @@ class User(AbstractUser):
     # логинимся по email
     USERNAME_FIELD = 'username'
     # обязательное поле
-    REQUIRED_FIELDS = ['name', 'email', ]
+    REQUIRED_FIELDS = ['pseudonym', 'email', ]
 
     objects = UserManager()
 
     def __unicode__(self):
-        return '%d: %s' % (self.id, self.name)
+        return '%d: %s' % (self.id, self.pseudonym)
 
     def __str__(self):
         return self.email

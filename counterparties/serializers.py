@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from .models import Contractor, ContractorType
+from .models import Counterpart, Bank
 
 
-class ContractorTypeSerializer(serializers.ModelSerializer):
+class BankSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ContractorType
-        fields = ('name',)
+        model = Bank
+        fields = '__all__'
 
 
-class ContractorSerializer(serializers.ModelSerializer):
+class CounterpartSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Contractor
+        model = Counterpart
         fields = (
             'name',
             'boss_first_name',

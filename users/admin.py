@@ -10,7 +10,7 @@ class UserCreationForm(forms.UserCreationForm):
         model = User
         fields = (
             'username',
-            'name',
+            'pseudonym',
             'email',
             'first_name',
             'last_name',
@@ -59,8 +59,8 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'email',
                 'username',
+                'pseudonym',
                 'password',
             )
         }),
@@ -70,15 +70,16 @@ class UserAdmin(UserAdmin):
                 'first_name',
                 'last_name',
                 'photo',
+                'phone',
                 'tag_line',
             )
         }),
 
         (u'Права доступа', {
             'fields': (
-                'is_admin',
                 'groups',
                 'user_permissions',
+                'is_admin',
             )
         }),
 
@@ -103,7 +104,7 @@ class UserAdmin(UserAdmin):
     )
 
     search_fields = (
-        'name',
+        'pseudonym',
         'email',)
 
     ordering = (

@@ -1,31 +1,21 @@
 from django import forms
 from django.contrib import admin
-from .models import Counterpart, CounterpartType
-
-"""
-class BankChangeForm(forms.ModelForm):
-    class Meta:
-        model = Bank
-        fields = ('name',
-                  'address',
-                  'account',
-                  'bik',)
-"""
+from .models import Counterpart, Bank
 
 
 # Register your models here.
 @admin.register(Counterpart)
 class CounterpartAdmin(admin.ModelAdmin):
     list_display = ('name',
-                    'boss_first_name',
-                    'boss_second_name',
-                    'boss_last_name',
+                    'phone',
+                    'email',
+                    'site',
                     )
     fieldsets = (
         (None, {
             'fields': (
                 'name',
-                'type',
+                'full_name',
             )}),
         (u'Контактная информация', {
             'fields': (
@@ -33,16 +23,25 @@ class CounterpartAdmin(admin.ModelAdmin):
                 'boss_second_name',
                 'boss_last_name',
                 'address',
+                'post_address',
+                'email',
+                'site',
                 'phone',
             )}),
         (u'Реквизиты', {
             'fields': (
+                'account',
+                'bik',
                 'inn',
+                'kpp',
                 'ogrn',
                 'okpo',
                 'okato',
                 'bank',
-                'account',
+            )}),
+        (u'Персонал', {
+            'fields': (
+                'employees',
             )}),
     )
 
@@ -50,4 +49,36 @@ class CounterpartAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
-admin.site.register(CounterpartType)
+@admin.register(Bank)
+class BankAdmin(admin.ModelAdmin):
+    list_display = ('name',
+                    'full_name',
+                    )
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name',
+                'full_name',
+            )}),
+        (u'Контактная информация', {
+            'fields': (
+                'address',
+                'post_address',
+                'email',
+                'site',
+                'phone',
+            )}),
+        (u'Реквизиты', {
+            'fields': (
+                'account',
+                'bik',
+                'inn',
+                'kpp',
+                'ogrn',
+                'okpo',
+                'okato',
+            )}),
+    )
+
+    search_fields = ('name',)
+    ordering = ('name',)
