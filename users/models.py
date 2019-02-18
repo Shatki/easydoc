@@ -45,10 +45,10 @@ class User(AbstractUser):
     # Имя логина авторизации
     username = models.CharField(verbose_name=u'логин для входа в систему', unique=True, max_length=30, db_index=True,
                                 validators=[login])
-
     # Отображаемое имя пользователя
-    pseudonym = models.CharField(verbose_name=u'псевдоним пользователя в системе', unique=True, max_length=30, db_index=True,
-                            validators=[alpha_all])
+    pseudonym = models.CharField(verbose_name=u'псевдоним пользователя в системе', unique=True, max_length=30,
+                                 db_index=True,
+                                 validators=[alpha_all])
     # Авторизация будет происходить по E-mail
     email = models.EmailField(verbose_name=u'электронная почта', unique=True, max_length=255, validators=[email])
     # Имя - не является обязательным
@@ -64,13 +64,9 @@ class User(AbstractUser):
     # Атрибут суперпользователя
     is_admin = models.BooleanField(default=False, null=False)
 
-    # Сохраняем время создания и обновления аккаунта пользователя.
-    # Устанавливая auto_now_add=True, мы говорим Джанго автоматически
-    # ставить время при создании, причем далее поле будет нередактируемым.
-    #  Аналогично и auto_now=True, разница в том, что поле каждый раз обновляется с обновлением объекта
     date_joined = models.DateTimeField(verbose_name=u'дата создания', auto_now_add=True)
     date_updated = models.DateTimeField(verbose_name=u'последнее обновление', auto_now=True)
-    # логинимся по email
+    # логинимся
     USERNAME_FIELD = 'username'
     # обязательное поле
     REQUIRED_FIELDS = ['pseudonym', 'email', ]

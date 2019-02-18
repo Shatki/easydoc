@@ -3,12 +3,34 @@ from rest_framework.response import Response
 from django.http import Http404
 from rest_framework import status
 from rest_framework import permissions
+from rest_framework import generics
 # Users
 from users.models import User
 from users.serializers import UserSerializer
 # Counterparts
 from counterparties.models import Counterpart, Bank
 from counterparties.serializers import CounterpartSerializer, BankSerializer
+# login
+from django.contrib.auth import authenticate
+
+
+class LoginView(APIView):
+    permission_classes = ()
+
+    def post(self, request, ):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username=username, password=password)
+        if user:
+            return Response({"token": user.auth_token.key})
+        else:
+            return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCreate(generics.CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = UserSerializer
 
 
 class BankList(APIView):
@@ -75,13 +97,14 @@ class CounterpartList(APIView):
     @staticmethod
     def get_object():
         try:
-            return Counterpart.objects.all().order_by('-name')
+            return Counterpart.objects.all()
+            # .order_by('-name')
         except Counterpart.DoesNotExist:
             raise Http404
 
     def get(self, request, format=None):
-        counterparts = self.get_object()
-        serializer = CounterpartSerializer(counterparts, many=True)
+        counterparties = self.get_object()
+        serializer = CounterpartSerializer(counterparties, many=True)
         return Response(serializer.data)
 
 
@@ -124,13 +147,23 @@ class UserList(APIView):
     @staticmethod
     def get_object():
         try:
-            return User.objects.all().order_by('-pseudonym')
+            return User.objects.all()
+            # .order_by('-pseudonym')
         except User.DoesNotExist:
             raise Http404
 
     def get(self, request):
         users = self.get_object()
         serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        user = request.data.get('user')
+        # Create a user from the above data
+        serializer = UserSerializer(data=user)
+        if serializer.is_valid(raise_exception=True):
+            new_user = serializer.save()
+            print('new user created:' + new_user.username)
         return Response(serializer.data)
 
 
@@ -164,3 +197,6 @@ class UserDetail(APIView):
     #     user = self.get_object(pk)
     #     user.delete()
     #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
